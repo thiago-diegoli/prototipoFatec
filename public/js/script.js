@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             var material = doc2.getElementById('ContentPlaceHolder1_lbMaterialInfo');
 
                             if (codigoMaterial && material) {
+                                document.getElementById('informacoes').style.display = "block";
                                 var p1 = document.getElementById('p1');
                                 var p2 = document.getElementById('p2');
                                 

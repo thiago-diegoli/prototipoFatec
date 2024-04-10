@@ -10,3 +10,7 @@
     background-color: #f3f4f6;
     background-image: linear-gradient(to bottom, rgba(243, 244, 246, 0.5), rgba(229, 231, 235, 0.5));
 }
+
+#informacoes {
+    display: none;
+}

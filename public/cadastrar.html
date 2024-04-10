@@ -7,12 +7,20 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Requisição</title>
 </head>
-<body class="bg-[#f3f4f6]">
+<body class="bg-[#f3f4f6] poppins">
     <nav class="bg-white flex justify-between items-center">
         <div class="flex items-center">
             <a href="index.html">
                 <img src="img/fatec-votorantim.png" alt="Logo Fatec" class="h-20 mx-20">
             </a>
+            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+                <li>
+                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:p-0">Cadastrar</a>
+                </li>
+                <li>
+                    <a href="cadastrados.html" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:p-0">Produtos Cadastrados</a>
+                </li>
+            </ul>
         </div>
         <div>
             <img src="img/cps.png" alt="Logo CPS" class="h-16 mx-20">
@@ -26,7 +34,7 @@
             <form id="requisicao">
                 <div>
                     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-                    <div class="relative">
+                    <div class="relative my-4">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
@@ -36,19 +44,26 @@
                         <datalist id="sugestoes"></datalist>
                         <button type="button" id="pesquisarItem" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Pesquisar</button>
                     </div>
-                    <br>
-                    <div>
+                    <div id="informacoes" class="flex flex-col w-full leading-1.5 p-4 my-4 border-blue-200 border bg-blue-100 rounded-xl text-sm">
+                        <p class="font-semibold">Informações do produto</p>
                         <p id="p1"></p>
                         <p id="p2"></p>
                     </div>
-                    <div class="w-full">
-                        <label for="quantidade" class="block mb-2 text-sm font-medium text-gray-900">Quantidade</label>
-                        <input type="number" name="quantidade" id="quantidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Quantidade do produto">
+                    <div class="flex flex-wrap">
+                        <div class="w-full md:w-1/2 pr-3 mb-6 md:mb-0">
+                            <label for="quantidade" class="block mb-2 text-sm font-medium text-gray-900">Quantidade</label>
+                            <input type="number" name="quantidade" id="quantidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Quantidade do produto">
+                        </div>
+                        <br>
+                        <div class="w-full md:w-1/2 pl-3 mb-6 md:mb-0">
+                            <label for="preco" class="block mb-2 text-sm font-medium text-gray-900">Preço</label>
+                            <input type="number" name="preco" id="preco" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Preço do produto">
+                        </div>
                     </div>
                     <br>
                     <div class="sm:col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-                        <textarea id="description" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-400 focus:border-blue-400" placeholder="Seja específico"></textarea>
+                        <textarea id="description" rows="8" class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-400 focus:border-blue-400" placeholder="Descrição da requisição"></textarea>
                     </div>
                 </div>
                 <button type="button" id="submitBtn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:ring-blue-100">
