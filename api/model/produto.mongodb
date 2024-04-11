@@ -1,0 +1,14 @@
+use('ProjetoCompras')
+const produto = 
+
+{
+    "nome": "Caneta Aplicadora de Insulina",
+    "quantidade": 3,
+    "preco": 44.00,
+    "descricao": "Caneta Aplicadora de Insulina",
+    "data": new Date()
+}
+db.produtos.insertOne(produto)
+
+use('ProjetoCompras')
+db.produtos.find()

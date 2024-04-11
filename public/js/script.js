@@ -1,3 +1,5 @@
+const urlBase = 'http://localhost:4000/api'
+
 document.addEventListener('DOMContentLoaded', function () {
     var input = document.getElementById('produtoDesejadoInput');
     var sugestoesList = document.getElementById('sugestoes');
@@ -93,3 +95,41 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
+
+
+document.getElementById('requisicao').addEventListener('submit', function (event){
+    event.preventDefault() // evita o carregamento
+    let produto = {} // Objeto prestador
+    produto = {
+        "nome": document.getElementById('produtoDesejadoInput').value,
+        "quantidade": document.getElementById('quantidade').value,
+        "preco": document.getElementById('preco').value,
+        "descricao": document.getElementById('description').value,
+        "data": new Date()
+    } 
+    salvarProduto(produto)
+})
+
+async function salvarProduto(produto){
+    await fetch(`${urlBase}/produtos`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(produto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.acknowledged){
+            alert('Produto incluido com sucesso!')
+            //limpamos o fomulario
+            document.getElementById('requisicao').reset()
+            //atualizamos a listagem
+            //carregaProdutos()
+        }else if (data.errors){
+            const errorMessages = data.errors.map(error => error.msg).join('\n')
+            document.getElementById('mensagem').innerHTML = `<span class='text-danger'>${errorMessages}</span>`
+        }
+    })
+}
