@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Requisição</title>
 </head>
-<body class="bg-[#f3f4f6] poppins">
+<body  onload="carregaPrestadores()" class="bg-[#f3f4f6] poppins">
     <nav class="bg-white flex justify-between items-center">
         <div class="flex items-center">
             <a href="index.html">
@@ -27,6 +27,88 @@
         </div>
     </nav>
     <hr>
+    <div class="py-8 px-4 mx-auto max-w-5xl lg:py-16">
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 border-2">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nome
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Quantidade
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Preço
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Descrição
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Data
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Opções
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="dadosTabela">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <!-- Icone do modal -->
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                    Editar Produto
+                  </h3>
+                  <!-- Conteúdo do modal -->
+                  <div class="mt-2">
+                    <form id="editForm" class="grid grid-cols-1 gap-y-6">
+                      <div>
+                        <label for="editNome" class="block text-sm font-medium text-gray-700">Nome</label>
+                        <input type="text" name="editNome" id="editNome" autocomplete="given-name" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                      </div>
+                      <div>
+                        <label for="editQuantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
+                        <input type="number" name="editQuantidade" id="editQuantidade" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                      </div>
+                      <div>
+                        <label for="editPreco" class="block text-sm font-medium text-gray-700">Preço</label>
+                        <input type="text" name="editPreco" id="editPreco" autocomplete="price" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                      </div>
+                      <div>
+                        <label for="editDescricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+                        <textarea id="editDescricao" name="editDescricao" rows="3" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md" required></textarea>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button id="submitEdit" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Enviar
+              </button>
+              <button id="closeModal" onclick="fecharModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
     <script src="js/script.js"></script>
 </body>
 </html>

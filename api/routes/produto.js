@@ -41,6 +41,26 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/id/:id', async (req, res) => {
+    try {
+        const docs = []
+        await db.collection(nomeCollection)
+            .find({'_id': {$eq: new ObjectId(req.params.id)}}, {})
+            .forEach((doc) => {
+                docs.push(doc)
+            })
+            res.status(200).json(docs)
+    } catch(err){
+        res.status(500).json({
+            erros: [{
+                value: `${err.message}`,
+                msg: 'Erro ao obeter o produto pelo ID',
+                param: 'id/:id'
+            }]
+        })
+    }
+})
+
 router.post('/', validaProduto,  async(req, res) => {
     try{
         const errors = validationResult(req)

@@ -133,3 +133,102 @@ async function salvarProduto(produto){
         }
     })
 }
+
+async function carregaPrestadores(){
+    const tabela = document.getElementById('dadosTabela')
+    tabela.innerHTML = '';
+    await fetch(`${urlBase}/produtos`, {
+        method: 'GET',
+        header: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(produto => {
+            tabela.innerHTML += `
+            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50">
+                <td class="px-6 py-4">${produto.nome}</td>
+                <td class="px-6 py-4">${produto.quantidade}</td>
+                <td class="px-6 py-4">${produto.preco}</td>
+                <td class="px-6 py-4">${produto.descricao}</td>
+                <td class="px-6 py-4">${new Date(produto.data).toLocaleDateString()}</td>
+                <td class="px-6 py-4">
+                    <div class="flex flex-row justify-center">
+                        <button class='max-w-20 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 text-center' onclick="abrirModal('${produto._id}')">Editar&nbsp;</button>
+                        <button class='max-w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center' onclick="removeProduto('${produto._id}')">Excluir</button>
+                    </div>
+                </td>
+            </tr>
+            `
+        })
+    })
+}
+
+async function removeProduto(id) {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+        await fetch(`${urlBase}/produtos/${id}`, {
+            method: "DELETE",
+            header: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.deletedCount === 1) {
+                alert('Produto excluído com sucesso!');
+                // Após excluir o produto com sucesso, você pode recarregar a lista de produtos para refletir a alteração
+                carregaPrestadores();
+            } else {
+                alert('Falha ao excluir o produto.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao excluir o produto:', error);
+            alert('Erro ao excluir o produto.');
+        });
+    }
+}
+
+
+
+
+function abrirModal(id) {
+    const produto = obterProdutoPorId(id); // Implemente a lógica para obter as informações do produto pelo ID
+    if (produto) {
+        console.log(produto)
+        document.getElementById('editNome').value = produto.nome;
+        document.getElementById('editQuantidade').value = produto.quantidade;
+        document.getElementById('editPreco').value = produto.preco;
+        document.getElementById('editDescricao').value = produto.descricao;
+        document.getElementById('modal').classList.remove('hidden');
+    }
+}
+
+function fecharModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+document.getElementById('submitEdit').addEventListener('click', function() {
+    const produtoEditado = {
+        nome: document.getElementById('editNome').value,
+        quantidade: document.getElementById('editQuantidade').value,
+        preco: document.getElementById('editPreco').value,
+        descricao: document.getElementById('editDescricao').value
+    };
+    editarProduto(produtoEditado);
+});
+
+async function obterProdutoPorId(id) {
+    try {
+        const response = await fetch(`${urlBase}/produtos/id/${id}`);
+        if (!response.ok) {
+            throw new Error('Erro ao obter detalhes do produto.');
+        }
+        const produto = await response.json();
+        return produto;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
