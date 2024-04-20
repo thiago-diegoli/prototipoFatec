@@ -25,7 +25,7 @@ PUT {{baseURL}}
 Content-Type: application/json
 
 {
-    "_id": "66172ddcb55d49dded36975c",
+    "_id": "6623bcd6c7fb6560f205bd46",
     "nome": "Caneta Esferografica Vermelha",
     "quantidade": "2",
     "preco": "5",

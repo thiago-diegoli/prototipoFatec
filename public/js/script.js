@@ -147,7 +147,7 @@ async function carregaPrestadores(){
     .then(data => {
         data.forEach(produto => {
             tabela.innerHTML += `
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50">
+            <tr class="odd:bg-white even:bg-gray-50">
                 <td class="px-6 py-4">${produto.nome}</td>
                 <td class="px-6 py-4">${produto.quantidade}</td>
                 <td class="px-6 py-4">${produto.preco}</td>
@@ -177,7 +177,6 @@ async function removeProduto(id) {
         .then(data => {
             if (data.deletedCount === 1) {
                 alert('Produto excluído com sucesso!');
-                // Após excluir o produto com sucesso, você pode recarregar a lista de produtos para refletir a alteração
                 carregaPrestadores();
             } else {
                 alert('Falha ao excluir o produto.');
@@ -193,10 +192,11 @@ async function removeProduto(id) {
 
 
 
-function abrirModal(id) {
-    const produto = obterProdutoPorId(id); // Implemente a lógica para obter as informações do produto pelo ID
+async function abrirModal(id) {
+    const produtoObj = await obterProdutoPorId(id);
+    const produto = produtoObj[0]
     if (produto) {
-        console.log(produto)
+        document.getElementById('editId').value = produto._id;
         document.getElementById('editNome').value = produto.nome;
         document.getElementById('editQuantidade').value = produto.quantidade;
         document.getElementById('editPreco').value = produto.preco;
@@ -209,15 +209,39 @@ function fecharModal() {
     document.getElementById('modal').classList.add('hidden');
 }
 
-document.getElementById('submitEdit').addEventListener('click', function() {
-    const produtoEditado = {
-        nome: document.getElementById('editNome').value,
-        quantidade: document.getElementById('editQuantidade').value,
-        preco: document.getElementById('editPreco').value,
-        descricao: document.getElementById('editDescricao').value
-    };
-    editarProduto(produtoEditado);
-});
+async function editarProduto() {
+    try {
+        const produtoEditado = {
+            _id: document.getElementById('editId').value,
+            nome: document.getElementById('editNome').value,
+            quantidade: document.getElementById('editQuantidade').value,
+            preco: document.getElementById('editPreco').value,
+            descricao: document.getElementById('editDescricao').value
+        };
+
+        const response = await fetch(`${urlBase}/produtos`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(produtoEditado)
+        });
+
+        if (!response.ok) {
+            console.log(response);
+            throw new Error('Erro ao editar o produto.');
+        }
+
+        const produtoAtualizado = await response.json();
+        fecharModal();
+        carregaPrestadores();
+        return produtoAtualizado;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
 
 async function obterProdutoPorId(id) {
     try {

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Requisição</title>
 </head>
-<body  onload="carregaPrestadores()" class="bg-[#f3f4f6] poppins">
+<body  onload="carregaPrestadores()" class="bg-white poppins">
     <nav class="bg-white flex justify-between items-center">
         <div class="flex items-center">
             <a href="index.html">
@@ -75,9 +75,12 @@
                   <!-- Conteúdo do modal -->
                   <div class="mt-2">
                     <form id="editForm" class="grid grid-cols-1 gap-y-6">
+                      <div style="display: none">
+                        <input type="text" name="editId" id="editId"required>
+                      </div>
                       <div>
                         <label for="editNome" class="block text-sm font-medium text-gray-700">Nome</label>
-                        <input type="text" name="editNome" id="editNome" autocomplete="given-name" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                        <input type="text" name="editNome" id="editNome" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
                       </div>
                       <div>
                         <label for="editQuantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
@@ -85,7 +88,7 @@
                       </div>
                       <div>
                         <label for="editPreco" class="block text-sm font-medium text-gray-700">Preço</label>
-                        <input type="text" name="editPreco" id="editPreco" autocomplete="price" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                        <input type="text" name="editPreco" id="editPreco" class="mt-1 p-2 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
                       </div>
                       <div>
                         <label for="editDescricao" class="block text-sm font-medium text-gray-700">Descrição</label>
@@ -97,7 +100,7 @@
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button id="submitEdit" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+              <button id="submitEdit" onclick="editarProduto()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
                 Enviar
               </button>
               <button id="closeModal" onclick="fecharModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">

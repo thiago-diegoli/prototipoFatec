@@ -92,8 +92,8 @@ router.delete('/:id', async(req, res) => {
 })
 
 router.put('/', validaProduto, async(req, res) => {
-    let idDocumento = req.body._id //armazenamos o _id do documento
-    delete req.body._id //remove o _id do body que foi recebido na req
+    let idDocumento = req.body._id
+    delete req.body._id
     try{
         const errors = validationResult(req)
         if(!errors.isEmpty()){
@@ -101,7 +101,7 @@ router.put('/', validaProduto, async(req, res) => {
         }
         const produto = await db.collection(nomeCollection).updateOne({'_id': {$eq: new ObjectId(idDocumento)}},
         {$set: req.body})
-        res.status(202).json(produto)//Accepted    
+        res.status(202).json(produto)  
     } catch (err){
         res.status(500).json({errors: err.message})
     }
