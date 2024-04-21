@@ -20,7 +20,8 @@ const validaProduto = [
     check('descricao').notEmpty().withMessage('A descricao é obrigatoria'),  
 ]
 
-
+//GET /api/produtos
+//param.: limit, skip e order
 router.get('/', async (req, res) => {
     const {limit, skip, order} = req.query //Obter da URL
     try{
@@ -41,6 +42,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+//GET produtos/id/:id
 router.get('/id/:id', async (req, res) => {
     try {
         const docs = []

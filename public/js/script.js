@@ -134,7 +134,7 @@ async function salvarProduto(produto){
     })
 }
 
-async function carregaPrestadores(){
+async function carregaProdutos(){
     const tabela = document.getElementById('dadosTabela')
     tabela.innerHTML = '';
     await fetch(`${urlBase}/produtos`, {
@@ -177,7 +177,7 @@ async function removeProduto(id) {
         .then(data => {
             if (data.deletedCount === 1) {
                 alert('Produto excluído com sucesso!');
-                carregaPrestadores();
+                carregaProdutos();
             } else {
                 alert('Falha ao excluir o produto.');
             }
@@ -234,7 +234,7 @@ async function editarProduto() {
 
         const produtoAtualizado = await response.json();
         fecharModal();
-        carregaPrestadores();
+        carregaProdutos();
         return produtoAtualizado;
     } catch (error) {
         console.error(error.message);
