@@ -9,7 +9,7 @@ Este é o repositório do primeiro trabalho de banco de dados não relacional de
 Você pode acessar a aplicação hospedada no Vercel [aqui](link).
 
 ## Sobre
-Este projeto foi pensado como um sistema de compras utilizado pelos responsáveis de compras de materiais da Fatec Votorantim baseado no padrão da BEC (Bolsa Eletrônica de Compras de São Paulo). 
+Este projeto foi pensado como um sistema de pedido compras utilizado pelos responsáveis de compras de materiais da Fatec Votorantim baseado no padrão da BEC (Bolsa Eletrônica de Compras de São Paulo). 
 
 Baseado em necessidades apontadas por funcionários, o usuário utilizará o sistema para armazenar dados que serão utilizados posteriormente em um novo pedido de compra, de forma que organize opções de compras e otimize tempo de pesquisa.
 
