@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.getElementById('requisicao').addEventListener('submit', function (event){
     event.preventDefault() // evita o carregamento
-    let produto = {} // Objeto prestador
+    let produto = {} // Objeto produto
     produto = {
         "nome": document.getElementById('produtoDesejadoInput').value,
         "quantidade": document.getElementById('quantidade').value,
@@ -110,6 +110,20 @@ document.getElementById('requisicao').addEventListener('submit', function (event
     } 
     salvarProduto(produto)
 })
+
+//filtro
+document.getElementById('filtrar').addEventListener('submit', function (event){
+    event.preventDefault()
+    let filtros = {}
+    filtros = {
+        "qtdMin": document.getElementById('qtdMin').value,
+        "qtdMax": document.getElementById('qtdMax').value,
+        "precoMin": document.getElementById('precoMin').value,
+        "precoMax": document.getElementById('precoMax').value,
+        "dataInicio": document.getElementById('dataInicio').value,
+    }
+})
+
 
 async function salvarProduto(produto){
     await fetch(`${urlBase}/produtos`, {

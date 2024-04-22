@@ -26,6 +26,7 @@ router.get('/', async (req, res) => {
     const {limit, skip, order} = req.query //Obter da URL
     try{
         const docs = []
+        
         await db.collection(nomeCollection).find()
         .limit(parseInt(limit) || 10)
         .skip(parseInt(skip) || 0)
@@ -56,8 +57,44 @@ router.get('/id/:id', async (req, res) => {
         res.status(500).json({
             erros: [{
                 value: `${err.message}`,
-                msg: 'Erro ao obeter o produto pelo ID',
+                msg: 'Erro ao obter o produto pelo ID',
                 param: 'id/:id'
+            }]
+        })
+    }
+})
+
+//GET produtos/quantidade
+//param.: qtdMin, qtdMax
+router.get('/filtros/', async (req, res) =>{
+    const {qtdMin, qtdMax, quantidade, precoMin, precoMax, preco, data, dataMin, dataMax} = req.query
+    try{
+        const docs = []
+
+        await db.collection(nomeCollection)
+        .find({
+            $or:[
+                {$and:[
+                    {'quantidade': {$gte: req.query.qtdMin}},
+                    {'quantidade': {$lte: req.query.qtdMax}}
+                ]},
+                {'quantidade': req.query.quantidade},
+                {'quantidade': {$gte: req.query.qtdMin}},
+                {'quantidade': {$lte: req.query.qtdMax}}
+            ]
+                
+        }
+        )
+        .forEach((doc)=>{
+            docs.push(doc)
+        })
+        res.status(200).json(docs)
+    } catch(err){
+        res.status(500).json({
+            erros: [{
+                value: `${err.message}`,
+                msg: 'Erro ao obter o produto pelo filtro',
+                param: 'filtros/:filtros'
             }]
         })
     }
