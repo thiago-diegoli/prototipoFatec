@@ -64,23 +64,37 @@ router.get('/id/:id', async (req, res) => {
     }
 })
 
-//GET produtos/quantidade
-//param.: qtdMin, qtdMax
+//GET filtros/?query
 router.get('/filtros/', async (req, res) =>{
     const {qtdMin, qtdMax, quantidade, precoMin, precoMax, preco, data, dataMin, dataMax} = req.query
+    const filtroQtd = {$or:[
+        {$and:[ //GET api/produtos/filtros/?qtdMin=x&qtdMax=y
+            {'quantidade': {$gte: req.query.qtdMin}},
+            {'quantidade': {$lte: req.query.qtdMax}}
+        ]},
+        {'quantidade': req.query.quantidade}, //GET api/produtos/filtros/?quantidade
+        {'quantidade': {$gte: req.query.qtdMin}},
+        {'quantidade': {$lte: req.query.qtdMax}}
+    ]}
+    const filtroPreco = {$or:[
+        {$and:[
+            {'preco': {$gte: req.query.precoMin}},
+            {'preco': {$lte: req.query.precoMax}}
+        ]},
+        {'preco': req.query.preco},
+        {'preco': {$gte: req.query.precoMin}},
+        {'preco': {$lte: req.query.precoMax}}
+    ]}
+    
     try{
         const docs = []
 
         await db.collection(nomeCollection)
         .find({
             $or:[
-                {$and:[
-                    {'quantidade': {$gte: req.query.qtdMin}},
-                    {'quantidade': {$lte: req.query.qtdMax}}
-                ]},
-                {'quantidade': req.query.quantidade},
-                {'quantidade': {$gte: req.query.qtdMin}},
-                {'quantidade': {$lte: req.query.qtdMax}}
+                //param.: quantidade, qtdMin, qtdMax
+                
+                filtroQtd, filtroPreco, {$and:[filtroQtd, filtroPreco]}
             ]
                 
         }
@@ -94,7 +108,7 @@ router.get('/filtros/', async (req, res) =>{
             erros: [{
                 value: `${err.message}`,
                 msg: 'Erro ao obter o produto pelo filtro',
-                param: 'filtros/:filtros'
+                param: 'filtros/'
             }]
         })
     }
