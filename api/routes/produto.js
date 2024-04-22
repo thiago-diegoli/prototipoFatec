@@ -65,54 +65,39 @@ router.get('/id/:id', async (req, res) => {
 })
 
 //GET filtros/?query
-router.get('/filtros/', async (req, res) =>{
-    const {qtdMin, qtdMax, quantidade, precoMin, precoMax, preco, data, dataMin, dataMax} = req.query
-    const filtroQtd = {$or:[
-        {$and:[ //GET api/produtos/filtros/?qtdMin=x&qtdMax=y
-            {'quantidade': {$gte: req.query.qtdMin}},
-            {'quantidade': {$lte: req.query.qtdMax}}
-        ]},
-        {'quantidade': req.query.quantidade}, //GET api/produtos/filtros/?quantidade
-        {'quantidade': {$gte: req.query.qtdMin}},
-        {'quantidade': {$lte: req.query.qtdMax}}
-    ]}
-    const filtroPreco = {$or:[
-        {$and:[
-            {'preco': {$gte: req.query.precoMin}},
-            {'preco': {$lte: req.query.precoMax}}
-        ]},
-        {'preco': req.query.preco},
-        {'preco': {$gte: req.query.precoMin}},
-        {'preco': {$lte: req.query.precoMax}}
-    ]}
-    
-    try{
-        const docs = []
+router.get('/filtros/', async (req, res) => {
+    const { qtdMin, qtdMax, precoMin, precoMax} = req.query;
+    const filtroQtd = {
+                $and: [ //GET api/produtos/filtros/?qtdMin=x&qtdMax=y
+                    { 'quantidade': { $gte: req.query.qtdMin } },
+                    { 'quantidade': { $lte: req.query.qtdMax } }
+                ]
+    };
+    const filtroPreco = {
+                $and: [
+                    { 'preco': { $gte: req.query.precoMin } },
+                    { 'preco': { $lte: req.query.precoMax } }
+                ]
+    };
+    try {
+        const docs = await db.collection(nomeCollection)
+            .find({
+                $and: [filtroQtd, filtroPreco]
+            })
+            .toArray();
 
-        await db.collection(nomeCollection)
-        .find({
-            $or:[
-                //param.: quantidade, qtdMin, qtdMax
-                
-                filtroQtd, filtroPreco, {$and:[filtroQtd, filtroPreco]}
-            ]
-                
-        }
-        )
-        .forEach((doc)=>{
-            docs.push(doc)
-        })
-        res.status(200).json(docs)
-    } catch(err){
+        res.status(200).json(docs);
+    } catch (err) {
         res.status(500).json({
             erros: [{
                 value: `${err.message}`,
                 msg: 'Erro ao obter o produto pelo filtro',
                 param: 'filtros/'
             }]
-        })
+        });
     }
-})
+});
+
 
 router.post('/', validaProduto,  async(req, res) => {
     try{

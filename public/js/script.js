@@ -112,17 +112,65 @@ document.getElementById('requisicao').addEventListener('submit', function (event
 })
 
 //filtro
-document.getElementById('filtrar').addEventListener('submit', function (event){
-    event.preventDefault()
-    let filtros = {}
-    filtros = {
-        "qtdMin": document.getElementById('qtdMin').value,
-        "qtdMax": document.getElementById('qtdMax').value,
-        "precoMin": document.getElementById('precoMin').value,
-        "precoMax": document.getElementById('precoMax').value,
-        "dataInicio": document.getElementById('dataInicio').value,
+async function filtrarProduto() {
+    console.log('Botão de filtrar clicado');
+
+    const qtdMin = document.getElementById('qtdMin').value;
+    const qtdMax = document.getElementById('qtdMax').value;
+    const precoMin = document.getElementById('precoMin').value;
+    const precoMax = document.getElementById('precoMax').value;
+
+    const filtros = {};
+
+    if (qtdMin !== '') {
+        filtros.qtdMin = qtdMin;
     }
-})
+    if (qtdMax !== '') {
+        filtros.qtdMax = qtdMax;
+    }
+    if (precoMin !== '') {
+        filtros.precoMin = precoMin;
+    }
+    if (precoMax !== '') {
+        filtros.precoMax = precoMax;
+    }
+
+    try {
+        const queryString = new URLSearchParams(filtros).toString();
+        if(queryString !== ''){
+            const response = await fetch(`${urlBase}/produtos/filtros/?${queryString}`);
+            if (!response.ok) {
+                throw new Error('Erro ao buscar os produtos filtrados');
+            }
+
+            const data = await response.json();
+            const tabela = document.getElementById('dadosTabela');
+            tabela.innerHTML = '';
+
+            data.forEach(produto => {
+                tabela.innerHTML += `
+                    <tr class="odd:bg-white even:bg-gray-50">
+                        <td class="px-6 py-4">${produto.nome}</td>
+                        <td class="px-6 py-4">${produto.quantidade}</td>
+                        <td class="px-6 py-4">${produto.preco}</td>
+                        <td class="px-6 py-4">${produto.descricao}</td>
+                        <td class="px-6 py-4">${new Date(produto.data).toLocaleDateString()}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-row justify-center">
+                                <button class='max-w-20 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 text-center' onclick="abrirModal('${produto._id}')">Editar&nbsp;</button>
+                                <button class='max-w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center' onclick="removeProduto('${produto._id}')">Excluir</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        } else {
+            carregaProdutos();
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+    }
+}
 
 
 async function salvarProduto(produto){
@@ -131,7 +179,13 @@ async function salvarProduto(produto){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(produto)
+        body: JSON.stringify({
+            nome: produto.nome,
+            preco: parseFloat(produto.preco),
+            quantidade: parseInt(produto.quantidade),
+            descricao: produto.descricao,
+            data: produto.data
+        })
     })
     .then(response => response.json())
     .then(data => {
@@ -148,36 +202,53 @@ async function salvarProduto(produto){
     })
 }
 
-async function carregaProdutos(){
-    const tabela = document.getElementById('dadosTabela')
+async function carregaProdutos(filtros = {}) {
+    const tabela = document.getElementById('dadosTabela');
     tabela.innerHTML = '';
-    await fetch(`${urlBase}/produtos`, {
-        method: 'GET',
-        header: {
-            'Content-Type': 'application/json'
+
+    try {
+        let url = `${urlBase}/produtos/`;
+        const params = new URLSearchParams(filtros);
+        if (Object.keys(filtros).length > 0) {
+            url = `${urlBase}/produtos/filtros/?${params}`;
         }
-    })
-    .then(response => response.json())
-    .then(data => {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log(response)
+        if (!response.ok) {
+            throw new Error('Erro ao buscar os produtos filtrados');
+        }
+
+        const data = await response.json();
+        console.log(data)
+
         data.forEach(produto => {
             tabela.innerHTML += `
-            <tr class="odd:bg-white even:bg-gray-50">
-                <td class="px-6 py-4">${produto.nome}</td>
-                <td class="px-6 py-4">${produto.quantidade}</td>
-                <td class="px-6 py-4">${produto.preco}</td>
-                <td class="px-6 py-4">${produto.descricao}</td>
-                <td class="px-6 py-4">${new Date(produto.data).toLocaleDateString()}</td>
-                <td class="px-6 py-4">
-                    <div class="flex flex-row justify-center">
-                        <button class='max-w-20 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 text-center' onclick="abrirModal('${produto._id}')">Editar&nbsp;</button>
-                        <button class='max-w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center' onclick="removeProduto('${produto._id}')">Excluir</button>
-                    </div>
-                </td>
-            </tr>
-            `
-        })
-    })
+                <tr class="odd:bg-white even:bg-gray-50">
+                    <td class="px-6 py-4">${produto.nome}</td>
+                    <td class="px-6 py-4">${produto.quantidade}</td>
+                    <td class="px-6 py-4">${produto.preco}</td>
+                    <td class="px-6 py-4">${produto.descricao}</td>
+                    <td class="px-6 py-4">${new Date(produto.data).toLocaleDateString()}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-row justify-center">
+                            <button class='max-w-20 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 me-2 text-center' onclick="abrirModal('${produto._id}')">Editar&nbsp;</button>
+                            <button class='max-w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center' onclick="removeProduto('${produto._id}')">Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch (error) {
+        console.error('Erro:', error);
+        // Trate o erro de acordo com o que você deseja fazer no front-end
+    }
 }
+
 
 async function removeProduto(id) {
     if (confirm('Tem certeza que deseja excluir este produto?')) {

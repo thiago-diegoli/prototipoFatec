@@ -29,12 +29,11 @@
     <hr>
 
     <!-- Filtro -->
-    <!--
-    <div class="py-2 px-2 mx-auto max-w-2xl justify-self-auto md:flex-row max-sm:flex-col">
+    <div class="py-2 px-2 mx-auto max-w-3xl justify-self-auto md:flex-row max-sm:flex-col">
       <form id="filtrar" class="flex flex-row max-md:flex-col gap-2 justify-center">
         <div class="border-2 rounded-md py-2 px-2 flex gap-2">
           <label for="qtdMin" class="block mb-2 text-sm font-medium text-gray-900">Qtd. Min.</label>
-          <input type="number" name="qtdMin" id="qtfMin"
+          <input type="number" name="qtdMin" id="qtdMin"
           class="max-h-10 min-w-20 md:max-w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
           
           <label for="qtdMax" class="block mb-2 text-sm font-medium text-gray-900">Qtd. Máx.</label>
@@ -51,23 +50,12 @@
           <input type="number" name="precoMax" id="precoMax"
           class="max-h-10 min-w-20 md:max-w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         </div>
-
-        <div class="border-2 rounded-md py-2 px-2 flex" id="data">
-          <div>
-          <label for="dataInicio" class="block mb-2 text-sm font-medium text-gray-900">Data Inicial</label>
-          <input type="date" name="dataInicio" id="dataInicio">
-          </div><br>
-          <div>
-            <label for="dataFim" class="block mb-2 text-sm font-medium text-gray-900">Data Final</label>
-            <input type="date" name="dataFim" id="dataFim">
-          </div>
-        </div>
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Filtrar</button>
+        <button id="filtrar-btn" onclick="filtrarProduto()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Filtrar</button>
       </form>
     </div>
 
     
-    <hr> -->
+    <hr>
     <!-- Fim Filtro -->
     <div class="py-8 px-4 mx-auto max-w-5xl lg:py-16">
         
