@@ -97,6 +97,31 @@ router.get('/filtros/', async (req, res) => {
         });
     }
 });
+/*
+router.get('/filtros/data/:data', async (req, res)=>{
+    try{
+        const data = req.params.data.toString()
+        const docs = []
+        await db.collection(nomeCollection)
+        .find({
+            $or: [
+                {'data' : {$regex: data, $options: 'i'}}
+            ]
+        })
+        .forEach((doc) => {
+            docs.push(doc)
+        })
+        res.status(200).json(docs)
+    } catch(err){
+        res.status(500).json({
+            errors: [{
+                value: `${err.message}`,
+                msg: 'Erro ao obter o prroduto pelo filtro solicitado',
+                param: '/filtros/:filtro'
+            }]
+        })
+    }
+})*/
 
 
 router.post('/', validaProduto,  async(req, res) => {
