@@ -52,18 +52,18 @@
                     <div class="flex flex-wrap">
                         <div class="w-full md:w-1/2 pr-3 mb-6 md:mb-0">
                             <label for="quantidade" class="block mb-2 text-sm font-medium text-gray-900">Quantidade</label>
-                            <input type="number" name="quantidade" id="quantidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Quantidade do produto">
+                            <input type="number" name="quantidade" id="quantidade" min="1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Quantidade do produto">
                         </div>
                         <br>
                         <div class="w-full md:w-1/2 pl-3 mb-6 md:mb-0">
                             <label for="preco" class="block mb-2 text-sm font-medium text-gray-900">Preço</label>
-                            <input type="number" name="preco" step="0.01" id="preco" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Preço do produto">
+                            <input type="number" name="preco" step="0.01" id="preco" min="1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Preço do produto">
                         </div>
                     </div>
                     <br>
                     <div class="sm:col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-                        <textarea id="description" rows="8" class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-400 focus:border-blue-400" placeholder="Descrição da requisição"></textarea>
+                        <textarea id="description" rows="8"  class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-400 focus:border-blue-400" placeholder="Descrição da requisição"></textarea>
                     </div>
                 </div>
                 <button type="submit" id="submitBtn" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:ring-blue-100">

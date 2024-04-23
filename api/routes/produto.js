@@ -10,13 +10,15 @@ const nomeCollection = 'produtos'
 const validaProduto = [
     check('nome')
      .not().isEmpty().trim().withMessage('É obrigatório informar o nome')
-     .isAlphanumeric('pt-BR', {ignore: '/. '}).withMessage('A razão social não pode conter caracteres especiais'),
+     .isAlphanumeric('pt-BR', {ignore: '/. '}).withMessage('O nome não pode conter caracteres especiais'),
     check('quantidade')
      .not().isEmpty().trim().withMessage('A quantidade é obrigatória')
+     .isNumeric().isLength({min: 1}).withMessage('A quantidade não pode ser menor que 1')
      .isNumeric().withMessage('A quantidade deve ter apenas números'),
     check('preco')
-    .not().isEmpty().trim().withMessage('A quantidade é obrigatória')
-    .isNumeric().withMessage('A quantidade deve ter apenas números'),
+     .not().isEmpty().trim().withMessage('O preço é obrigatório')
+     .isNumeric().isLength({min: 1}).withMessage('O preço não pode ser menor que 1')
+     .isNumeric().withMessage('O preço deve ter apenas números'),
     check('descricao').notEmpty().withMessage('A descricao é obrigatoria'),  
 ]
 

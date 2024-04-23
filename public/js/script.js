@@ -197,7 +197,7 @@ async function salvarProduto(produto){
             //carregaProdutos()
         }else if (data.errors){
             const errorMessages = data.errors.map(error => error.msg).join('\n')
-            document.getElementById('mensagem').innerHTML = `<span class='text-danger'>${errorMessages}</span>`
+            alert(errorMessages)
         }
     })
 }

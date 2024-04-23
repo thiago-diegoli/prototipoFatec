@@ -5,6 +5,10 @@ GET {{baseURL}}/?limit=3&skip=0
 Content-Type: application/json
 
 ###
+GET {{baseURL}}/id/66172ddcb55d49dded36975c
+Content-Type: application/json
+
+###
 POST {{baseURL}}
 Content-Type: application/json
 
