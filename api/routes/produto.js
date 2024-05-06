@@ -9,17 +9,16 @@ const nomeCollection = 'produtos'
 
 const validaProduto = [
     check('nome')
-     .not().isEmpty().trim().withMessage('É obrigatório informar o nome')
-     .isAlphanumeric('pt-BR', {ignore: '/. '}).withMessage('O nome não pode conter caracteres especiais'),
+     .not().isEmpty().trim().withMessage('É obrigatório informar o nome'),
     check('quantidade')
      .not().isEmpty().trim().withMessage('A quantidade é obrigatória')
      .isNumeric().isLength({min: 1}).withMessage('A quantidade não pode ser menor que 1')
      .isNumeric().withMessage('A quantidade deve ter apenas números'),
     check('preco')
      .not().isEmpty().trim().withMessage('O preço é obrigatório')
-     .isNumeric().isLength({min: 1}).withMessage('O preço não pode ser menor que 1')
+     .isNumeric().isLength({min: 0}).withMessage('O preço não pode ser menor que 0')
      .isNumeric().withMessage('O preço deve ter apenas números'),
-    check('descricao').notEmpty().withMessage('A descricao é obrigatoria'),  
+    check('descricao').notEmpty().withMessage('A descrição é obrigatoria'),  
 ]
 
 //GET /api/produtos
@@ -68,37 +67,85 @@ router.get('/id/:id', async (req, res) => {
 
 //GET filtros/?query
 router.get('/filtros/', async (req, res) => {
-    const { qtdMin, qtdMax, precoMin, precoMax} = req.query;
-    const filtroQtd = {
-                $and: [ //GET api/produtos/filtros/?qtdMin=x&qtdMax=y
-                    { 'quantidade': { $gte: req.query.qtdMin } },
-                    { 'quantidade': { $lte: req.query.qtdMax } }
-                ]
-    };
-    const filtroPreco = {
-                $and: [
-                    { 'preco': { $gte: req.query.precoMin } },
-                    { 'preco': { $lte: req.query.precoMax } }
-                ]
-    };
-    try {
-        const docs = await db.collection(nomeCollection)
-            .find({
-                $and: [filtroQtd, filtroPreco]
+    const { qtdMin, qtdMax, precoMin, precoMax } = req.query;
+
+    let filtroQtd = {};
+    let filtroPreco = {};
+
+    if (qtdMin !== undefined && qtdMax !== undefined) {
+        filtroQtd = {
+            'quantidade': { $gte: parseInt(qtdMin), $lte: parseInt(qtdMax) }
+        };
+    } else if (qtdMin !== undefined) {
+        filtroQtd = {
+            'quantidade': { $gte: parseInt(qtdMin) }
+        };
+    } else if (qtdMax !== undefined) {
+        filtroQtd = {
+            'quantidade': { $lte: parseInt(qtdMax) }
+        };
+    }
+
+    if (precoMin !== undefined && precoMax !== undefined) {
+        if (parseFloat(precoMin)) {
+            filtroPreco = {
+                'preco': { $gte: parseFloat(precoMin), $lte: parseFloat(precoMax) }
+            };
+        }
+    } else if (precoMin !== undefined) {
+        filtroPreco = {
+            'preco': { $gte: parseFloat(precoMin) }
+        };
+    } else if (precoMax !== undefined) {
+        filtroPreco = {
+            'preco': { $lte: parseFloat(precoMax) }
+        };
+    }
+
+    if (Object.keys(filtroQtd).length === 0 && Object.keys(filtroPreco).length === 0) {
+        res.status(400).json({
+            errors: [{
+                value: 'Parâmetros inválidos',
+                msg: 'É necessário fornecer pelo menos um parâmetro de filtro (quantidade ou preço)'
+            }]
+        });
+        return;
+    } else {
+        if ((parseInt(qtdMin) >= parseInt(qtdMax)) || (parseFloat(precoMin) >= parseFloat(precoMax))) {
+            res.status(400).json({
+                errors: [{
+                    value: `Parâmetros inválidos`,
+                    msg: 'Os parâmetros são iguais ou a quantidade mínima é maior que a máxima'
+                }]
             })
-            .toArray();
+            return;
+        }
+    }
+
+    try {
+        const cursor = await db.collection(nomeCollection).find({
+            $and: [filtroQtd, filtroPreco]
+        });
+
+        const docs = [];
+        await cursor.forEach(doc => {
+            docs.push(doc);
+        });
 
         res.status(200).json(docs);
     } catch (err) {
         res.status(500).json({
-            erros: [{
-                value: `${err.message}`,
+            errors: [{
+                value: err.message,
                 msg: 'Erro ao obter o produto pelo filtro',
                 param: 'filtros/'
             }]
         });
     }
 });
+
+
+
 /*
 router.get('/filtros/data/:data', async (req, res)=>{
     try{
@@ -132,8 +179,15 @@ router.post('/', validaProduto,  async(req, res) => {
         if(!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()})
         }
-        const produto = await db.collection(nomeCollection).insertOne(req.body)
-        res.status(201).json(produto) //201 é o status created
+        const { quantidade, preco, ...outrasProps } = req.body
+        const produto = {
+            quantidade: parseInt(quantidade),
+            preco: parseFloat(preco),
+            ...outrasProps
+        }
+        const resultado = await db.collection(nomeCollection).insertOne(produto)
+
+        res.status(201).json(resultado)
     } catch (err){
         res.status(500).json({message: `${err.message} Erro no Server`})
     }
