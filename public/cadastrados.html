@@ -10,13 +10,13 @@
 <body  onload="carregaProdutos()" class="bg-white poppins">
   <header>
     <nav class="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
-        <ul class="navigation max-w-[90vw] flex flex-wrap justify-between items-center relative mx-auto py-8">
-            <a class="logo flex items-center" href="#">
-                <img src="img/fatec-votorantim.png" alt="Logo Fatec" class="h-16 mr-16">
-                <img src="img/cps.png" alt="Logo CPS" class="h-16">
-            </a>
-            <input type="checkbox" id="check" />      
-            <span class="menu flex [&>li]:pl-8 [&>li>a]:text-center [&>li>a]:relative [&>li>a]:transition [&>li>a]:duration-200 [&>li>a]:ease-in-out [&>li>a]:font-medium [&>li>a]:text-lg">
+      <ul class="navigation max-w-[90vw] flex flex-wrap justify-between items-center relative mx-auto py-4">
+          <a class="logo flex items-center" href="#">
+              <img src="img/fatec-votorantim.png" alt="Logo Fatec" class="h-16 mr-16">
+              <img src="img/cps.png" alt="Logo CPS" class="h-16">
+          </a>
+          <input type="checkbox" id="check" />      
+          <span class="menu flex [&>li]:pl-4 lg:[&>li]:pl-8 [&>li>a]:text-center [&>li>a]:relative [&>li>a]:transition [&>li>a]:duration-200 [&>li>a]:ease-in-out [&>li>a]:font-medium [&>li>a]:text-md lg:[&>li>a]:text-lg">
               <li><a href="cadastrar.html">Cadastrar Produto</a></li>
               <li><a href="#">Ver Cadastrados</a></li>
             <li><button type="button" onclick="fazerLogout()" class="text-white relative bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 transition duration-200 ease-in-out font-medium rounded-2xl text-lg px-6 py-1 text-center">Sair</button></li>
@@ -30,7 +30,7 @@
 </header>
 
     <!-- Filtro -->
-    <div class="py-2 px-2 mx-auto mt-36 max-w-3xl justify-self-auto md:flex-row max-sm:flex-col">
+    <div class="py-2 px-2 mx-auto mt-28 max-w-3xl justify-self-auto md:flex-row max-sm:flex-col">
       <form id="filtrar" class="flex flex-row max-md:flex-col gap-2 justify-center">
         <div class="border-2 rounded-md py-2 px-2 flex gap-2">
           <label for="qtdMin" class="block mb-2 text-sm font-medium text-gray-900">Qtd. Min.</label>
