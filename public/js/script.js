@@ -26,12 +26,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         throw new Error('Erro ao obter dados do servidor.');
                     })
                     .then(function (data) {
-                        sugestoesList.innerHTML = '';
+                        sugestoes.innerHTML = '';
                         data.d.forEach(function (item) {
-                            var option = document.createElement('option');
-                            option.value = item;
-                            sugestoesList.appendChild(option);
+                            var listaItems = document.createElement('li');
+                            listaItems.textContent = item;
+                            sugestoes.appendChild(listaItems);
+                            listaItems.addEventListener('click', function() {
+                                input.value = item;
+                                sugestoes.innerHTML = '';
+                            });
                         });
+                        sugestoes.classList.remove('hidden');
                     })
                     .catch(function (error) {
                         console.error(error.message);

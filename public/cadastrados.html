@@ -8,28 +8,29 @@
     <title>Requisição</title>
 </head>
 <body  onload="carregaProdutos()" class="bg-white poppins">
-    <nav class="bg-white flex justify-between items-center">
-        <div class="flex items-center">
-            <a href="index.html">
-                <img src="img/fatec-votorantim.png" alt="Logo Fatec" class="h-20 mx-20">
+  <header>
+    <nav class="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
+        <ul class="navigation max-w-[90vw] flex flex-wrap justify-between items-center relative mx-auto py-8">
+            <a class="logo flex items-center" href="#">
+                <img src="img/fatec-votorantim.png" alt="Logo Fatec" class="h-16 mr-16">
+                <img src="img/cps.png" alt="Logo CPS" class="h-16">
             </a>
-            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
-                <li>
-                    <a href="cadastrar.html" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:p-0">Cadastrar</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-600 md:p-0">Produtos Cadastrados</a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <img src="img/cps.png" alt="Logo CPS" class="h-16 mx-20">
-        </div>
+            <input type="checkbox" id="check" />      
+            <span class="menu flex [&>li]:pl-8 [&>li>a]:text-center [&>li>a]:relative [&>li>a]:transition [&>li>a]:duration-200 [&>li>a]:ease-in-out [&>li>a]:font-medium [&>li>a]:text-lg">
+              <li><a href="cadastrar.html">Cadastrar Produto</a></li>
+              <li><a href="#">Ver Cadastrados</a></li>
+            <li><button type="button" onclick="fazerLogout()" class="text-white relative bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 transition duration-200 ease-in-out font-medium rounded-2xl text-lg px-6 py-1 text-center">Sair</button></li>
+    
+            <label for="check" class="close-menu">X</label>
+            </span>
+    
+            <label for="check" class="open-menu font-medium">Menu</label>
+        </ul>
     </nav>
-    <hr>
+</header>
 
     <!-- Filtro -->
-    <div class="py-2 px-2 mx-auto max-w-3xl justify-self-auto md:flex-row max-sm:flex-col">
+    <div class="py-2 px-2 mx-auto mt-36 max-w-3xl justify-self-auto md:flex-row max-sm:flex-col">
       <form id="filtrar" class="flex flex-row max-md:flex-col gap-2 justify-center">
         <div class="border-2 rounded-md py-2 px-2 flex gap-2">
           <label for="qtdMin" class="block mb-2 text-sm font-medium text-gray-900">Qtd. Min.</label>
@@ -53,11 +54,9 @@
         <button id="filtrar-btn" onclick="filtrarProduto()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Filtrar</button>
       </form>
     </div>
-
-    
-    <hr>
     <!-- Fim Filtro -->
-    <div class="py-8 px-4 mx-auto max-w-5xl lg:py-16">
+
+    <div class="p-4 mx-auto max-w-5xl">
         
         <div class="relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 border-2">
