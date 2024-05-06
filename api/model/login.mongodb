@@ -1,0 +1,9 @@
+use('ProjetoCompras')
+
+const usuario = {
+    "nome": "João Silva",
+    "email": "exemplo@email.com",
+    "senha": "senha123" //senha não criptografada apenas para teste
+};
+
+db.logins.insertOne(usuario)

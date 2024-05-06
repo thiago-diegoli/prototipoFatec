@@ -1,108 +1,113 @@
 const urlBase = 'http://localhost:4000/api'
 
-document.addEventListener('DOMContentLoaded', function () {
-    var input = document.getElementById('produtoDesejadoInput');
-    var sugestoesList = document.getElementById('sugestoes');
-    var submitBtn = document.getElementById('pesquisarItem');
+const caminhoURL = window.location.pathname;
+var partesCaminho = caminhoURL.split("/");
+var ultimaParte = partesCaminho[partesCaminho.length - 1];
+if (ultimaParte == "cadastrar"){
+    document.addEventListener('DOMContentLoaded', function (event) {
+        event.preventDefault()
+        var input = document.getElementById('produtoDesejadoInput');
+        var sugestoesList = document.getElementById('sugestoes');
+        var submitBtn = document.getElementById('pesquisarItem');
 
-    var timeoutId;
-    if(input) {
-        input.addEventListener('input', function () {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(function () {
-                var prefixoTexto = input.value;
+        var timeoutId;
+        if(input) {
+            input.addEventListener('input', function () {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(function () {
+                    var prefixoTexto = input.value;
 
-                fetch('https://www.bec.sp.gov.br/BEC_Catalogo_ui/WebService/AutoComplete.asmx/GetItensList', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ prefixText: prefixoTexto, count: 20 })
-                })
+                    fetch('https://www.bec.sp.gov.br/BEC_Catalogo_ui/WebService/AutoComplete.asmx/GetItensList', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ prefixText: prefixoTexto, count: 20 })
+                    })
+                        .then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Erro ao obter dados do servidor.');
+                        })
+                        .then(function (data) {
+                            sugestoes.innerHTML = '';
+                            data.d.forEach(function (item) {
+                                var listaItems = document.createElement('li');
+                                listaItems.textContent = item;
+                                sugestoes.appendChild(listaItems);
+                                listaItems.addEventListener('click', function() {
+                                    input.value = item;
+                                    sugestoes.innerHTML = '';
+                                });
+                            });
+                            sugestoes.classList.remove('hidden');
+                        })
+                        .catch(function (error) {
+                            console.error(error.message);
+                        });
+                }, 1000);
+            });
+        }
+        if(submitBtn){
+            submitBtn.addEventListener('click', function (event) {
+                var descricaoInput = input.value.trim();
+
+                var url = 'https://www.bec.sp.gov.br/BEC_Catalogo_ui/CatalogoPesquisa3.aspx?chave=&pesquisa=Y&cod_id=&ds_item=' + encodeURIComponent(descricaoInput);
+
+                fetch(url)
                     .then(function (response) {
                         if (response.ok) {
-                            return response.json();
+                            return response.text();
                         }
-                        throw new Error('Erro ao obter dados do servidor.');
+                        throw new Error('Erro ao obter dados da página.');
                     })
-                    .then(function (data) {
-                        sugestoes.innerHTML = '';
-                        data.d.forEach(function (item) {
-                            var listaItems = document.createElement('li');
-                            listaItems.textContent = item;
-                            sugestoes.appendChild(listaItems);
-                            listaItems.addEventListener('click', function() {
-                                input.value = item;
-                                sugestoes.innerHTML = '';
-                            });
-                        });
-                        sugestoes.classList.remove('hidden');
+                    .then(function (html) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(html, 'text/html');
+                        var conteudoPesquisa = doc.getElementById('ContentPlaceHolder1_gvResultadoPesquisa_lbTituloItem_0');
+
+                        if (conteudoPesquisa) {
+                            var descricaoInput2 = conteudoPesquisa.innerHTML.split(" ")[0]
+                            var url2 = 'https://www.bec.sp.gov.br/BEC_Catalogo_ui/CatalogDetalheNovo.aspx?chave=&cod_id=' + encodeURIComponent(descricaoInput2) + '&selo=&origem=CatalogoPesquisa3'
+                            fetch(url2)
+                                .then(function (response2) {
+                                    if (response2.ok) {
+                                        return response2.text();
+                                    }
+                                    throw new Error('Erro ao obter dados da página.');
+                                })
+                                .then(function (html) {
+                                    var parser2 = new DOMParser();
+                                    var doc2 = parser2.parseFromString(html, 'text/html');
+                                    var codigoMaterial = doc2.getElementById('ContentPlaceHolder1_lbNElementoDespesaInfo');
+                                    var material = doc2.getElementById('ContentPlaceHolder1_lbMaterialInfo');
+
+                                    if (codigoMaterial && material) {
+                                        document.getElementById('informacoes').style.display = "block";
+                                        var p1 = document.getElementById('p1');
+                                        var p2 = document.getElementById('p2');
+                                        
+                                        p1.innerHTML = material.innerHTML
+                                        p2.innerHTML = codigoMaterial.innerHTML
+                                    } else {
+                                        console.error('Elemento não encontrado');
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.error(error.message);
+                                });
+                        } else {
+                            console.error('Div com ID ContentPlaceHolder1_gvResultadoPesquisa_lbTituloItem_0 não encontrada.');
+                        }
                     })
                     .catch(function (error) {
                         console.error(error.message);
                     });
-            }, 1000);
-        });
-    }
-    if(submitBtn){
-        submitBtn.addEventListener('click', function (event) {
-            var descricaoInput = input.value.trim();
-
-            var url = 'https://www.bec.sp.gov.br/BEC_Catalogo_ui/CatalogoPesquisa3.aspx?chave=&pesquisa=Y&cod_id=&ds_item=' + encodeURIComponent(descricaoInput);
-
-            fetch(url)
-                .then(function (response) {
-                    if (response.ok) {
-                        return response.text();
-                    }
-                    throw new Error('Erro ao obter dados da página.');
-                })
-                .then(function (html) {
-                    var parser = new DOMParser();
-                    var doc = parser.parseFromString(html, 'text/html');
-                    var conteudoPesquisa = doc.getElementById('ContentPlaceHolder1_gvResultadoPesquisa_lbTituloItem_0');
-
-                    if (conteudoPesquisa) {
-                        var descricaoInput2 = conteudoPesquisa.innerHTML.split(" ")[0]
-                        var url2 = 'https://www.bec.sp.gov.br/BEC_Catalogo_ui/CatalogDetalheNovo.aspx?chave=&cod_id=' + encodeURIComponent(descricaoInput2) + '&selo=&origem=CatalogoPesquisa3'
-                        fetch(url2)
-                            .then(function (response2) {
-                                if (response2.ok) {
-                                    return response2.text();
-                                }
-                                throw new Error('Erro ao obter dados da página.');
-                            })
-                            .then(function (html) {
-                                var parser2 = new DOMParser();
-                                var doc2 = parser2.parseFromString(html, 'text/html');
-                                var codigoMaterial = doc2.getElementById('ContentPlaceHolder1_lbNElementoDespesaInfo');
-                                var material = doc2.getElementById('ContentPlaceHolder1_lbMaterialInfo');
-
-                                if (codigoMaterial && material) {
-                                    document.getElementById('informacoes').style.display = "block";
-                                    var p1 = document.getElementById('p1');
-                                    var p2 = document.getElementById('p2');
-                                    
-                                    p1.innerHTML = material.innerHTML
-                                    p2.innerHTML = codigoMaterial.innerHTML
-                                } else {
-                                    console.error('Elemento não encontrado');
-                                }
-                            })
-                            .catch(function (error) {
-                                console.error(error.message);
-                            });
-                    } else {
-                        console.error('Div com ID ContentPlaceHolder1_gvResultadoPesquisa_lbTituloItem_0 não encontrada.');
-                    }
-                })
-                .catch(function (error) {
-                    console.error(error.message);
-                });
-        });
-    }
-});
-
+            });
+        }
+    });
+}
 
 
 const requisicaoForm = document.getElementById('requisicao');
@@ -347,4 +352,103 @@ async function obterProdutoPorId(id) {
         console.error(error.message);
         return null;
     }
+}
+
+
+
+
+
+//Parte do login
+async function cadastrarUsuario(nome, email, senha) {
+    try {
+        const response = await fetch(`${urlBase}/logins/cadastro`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, email, senha })
+        });
+        if (response.ok) {
+            window.location.href = 'index.html';
+        } else if (response.status === 409){
+            alert('Email já cadastrado');
+        } else {
+            console.error('Erro ao fazer cadastro:', response.statusText);
+            throw new Error('Erro ao fazer cadastro');
+        }
+    } catch (error) {
+        console.error('Erro ao cadastrar usuário:', error);
+        throw error;
+    }
+}
+
+async function fazerLogin(email, senha) {
+    try {
+        const response = await fetch(`${urlBase}/logins`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, senha })
+        });
+        if (response.ok) {
+            const data = await response.json();
+
+            // armazenando jwt, nome e email com cookie
+            document.cookie = `token=${data.token}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
+            document.cookie = `nome=${data.nome}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
+            document.cookie = `email=${data.email}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
+
+            window.location.href = 'cadastrar.html';
+        } else if (response.status === 401) {
+            alert('Credenciais inválidas');
+        } else {
+            console.error('Erro ao fazer login:', response.statusText);
+            throw new Error('Erro ao fazer login');
+        }
+    } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        throw error;
+    }
+}
+
+function fazerLogout() {
+
+    const expiredDate = new Date(0).toUTCString();
+    document.cookie = `token=; expires=${expiredDate}; path=/`;
+    document.cookie = `nome=; expires=${expiredDate}; path=/`;
+    document.cookie = `email=; expires=${expiredDate}; path=/`;
+
+    window.location.href = 'index.html';
+}
+const formCadastro = document.getElementById('formCadastro');
+if (formCadastro){
+    document.getElementById('formCadastro').addEventListener('submit', async function (event) {
+        event.preventDefault()
+    
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('password').value;
+    
+        try {
+            await cadastrarUsuario(nome, email, senha);
+        } catch (error) {
+            console.error('Erro ao cadastrar usuário:', error);
+        }
+    });
+}
+
+const formLogin = document.getElementById('formLogin');
+if(formLogin){
+    document.getElementById('formLogin').addEventListener('submit', async function (event){
+        event.preventDefault()
+        const email = document.getElementById('email').value
+        const senha = document.getElementById('password').value
+
+        try {
+            await fazerLogin(email, senha);
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+        }
+    })
 }

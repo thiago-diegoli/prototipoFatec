@@ -34,6 +34,8 @@ npm i mongodb
 npm i dotenv
 npm i express-validator
 npm i nodemon -D
+npm i bcrypt
+npm i jsonwebtoken
 ```
 
 Certifique-se de estar dentro do diretório do projeto ao executar esses comandos.

@@ -1,0 +1,17 @@
+@baseURL = http://localhost:4000/api/logins
+POST {{baseURL}}/cadastro
+Content-Type: application/json
+
+{
+    "nome": "Nome do Usuário",
+    "email": "nome@email.com",
+    "senha": "senha123"
+}
+###
+POST {{baseURL}}/
+Content-Type: application/json
+
+{
+    "email": "nome@email.com",
+    "senha": "senha123"
+}
