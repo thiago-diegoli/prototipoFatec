@@ -423,7 +423,7 @@ function fazerLogout() {
 }
 const formCadastro = document.getElementById('formCadastro');
 if (formCadastro){
-    document.getElementById('formCadastro').addEventListener('submit', async function (event) {
+    formCadastro.addEventListener('submit', async function (event) {
         event.preventDefault()
     
         const nome = document.getElementById('nome').value;
@@ -440,7 +440,7 @@ if (formCadastro){
 
 const formLogin = document.getElementById('formLogin');
 if(formLogin){
-    document.getElementById('formLogin').addEventListener('submit', async function (event){
+    formLogin.addEventListener('submit', async function (event){
         event.preventDefault()
         const email = document.getElementById('email').value
         const senha = document.getElementById('password').value

@@ -3,14 +3,17 @@
 
 GET {{baseURL}}/?limit=3&skip=0
 Content-Type: application/json
+access-token:
 
 ###
 GET {{baseURL}}/id/66172ddcb55d49dded36975c
 Content-Type: application/json
+access-token:
 
 ###
 POST {{baseURL}}
 Content-Type: application/json
+access-token:
 
 {
     "nome": "Caneta Esferografica Azul",
@@ -23,10 +26,12 @@ Content-Type: application/json
 ###
 DELETE {{baseURL}}/6639171fda80f9cc4adaa803
 Content-Type: application/json
+access-token:
 
 ###
 PUT {{baseURL}}
 Content-Type: application/json
+access-token:
 
 {
     "_id": "6623bcd6c7fb6560f205bd46",
@@ -39,3 +44,4 @@ Content-Type: application/json
 ###
 GET {{baseURL}}/filtros/?qtdMin=1&qtdMax=4&precoMin=40&precoMax=50
 Content-Type: application/json
+access-token:

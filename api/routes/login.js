@@ -63,20 +63,22 @@ router.post('/', validaLogin, async (req, res) => {
         const usuario = await db.collection(nomeCollection).findOne({ email });
 
         if (!usuario) {
-            return res.status(401).json();
+            return res.status(404).json();
         }
 
         const senhaCorrespondente = await bcrypt.compare(senha, usuario.senha);
 
         if (!senhaCorrespondente) {
-            return res.status(401).json();
+            return res.status(403).json();
         }
-        const token = jwt.sign({ userId: usuario._id }, 'chave_secreta', { expiresIn: '1h' });
-        res.status(200).json({
-            token,
-            nome: usuario.nome,
-            email: usuario.email
-        });
+        jwt.sign({ userId: usuario._id }, process.env.SECRET_KEY, { expiresIn: process.env.EXPIRES_IN },
+            (err, token) => {
+              if (err) throw err
+              res.status(200).json({
+                  access_token: token
+                })
+            }
+        );
     } catch(err) {
         res.status(500).json({ message: `${err.message} Erro no server` });
     }
