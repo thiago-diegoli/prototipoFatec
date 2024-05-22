@@ -6,9 +6,9 @@ Content-Type: application/json
 access-token:
 
 ###
-GET {{baseURL}}/id/66172ddcb55d49dded36975c
+GET {{baseURL}}/id/6626f488d60c4529f354953e
 Content-Type: application/json
-access-token:
+access-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkMmY5YzI3ZjZhZjIyM2M2ZmIzYzMiLCJpYXQiOjE3MTYzMzQ2ODgsImV4cCI6MTcxNjQyMTA4OH0.o8PGv6F5-xi79lTJ3iJgyc1JJaBWgBHb3n1JV6BCMPk
 
 ###
 POST {{baseURL}}

@@ -1,11 +1,13 @@
 const urlBase = 'http://localhost:4000/api'
+const access_token = localStorage.getItem('token') || null
 
-const caminhoURL = window.location.pathname;
-var partesCaminho = caminhoURL.split("/");
-var ultimaParte = partesCaminho[partesCaminho.length - 1];
-if (ultimaParte == "cadastrar"){
-    document.addEventListener('DOMContentLoaded', function (event) {
-        event.preventDefault()
+document.addEventListener('DOMContentLoaded', function (event) {
+    event.preventDefault()
+    verificarAutenticacao();
+    const caminhoURL = window.location.pathname;
+    var partesCaminho = caminhoURL.split("/");
+    var ultimaParte = partesCaminho[partesCaminho.length - 1];
+    if (ultimaParte == "cadastrar"){
         var input = document.getElementById('produtoDesejadoInput');
         var sugestoesList = document.getElementById('sugestoes');
         var submitBtn = document.getElementById('pesquisarItem');
@@ -106,9 +108,8 @@ if (ultimaParte == "cadastrar"){
                     });
             });
         }
-    });
-}
-
+    }
+});
 
 const requisicaoForm = document.getElementById('requisicao');
 
@@ -152,7 +153,13 @@ async function filtrarProduto() {
     try {
         const queryString = new URLSearchParams(filtros).toString();
         if(queryString !== ''){
-            const response = await fetch(`${urlBase}/produtos/filtros/?${queryString}`);
+            const response = await fetch(`${urlBase}/produtos/filtros/?${queryString}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'access-token': access_token
+                }
+            });
             if (!response.ok) {
                 throw new Error('Erro ao buscar os produtos filtrados');
             }
@@ -191,7 +198,8 @@ async function salvarProduto(produto){
     await fetch(`${urlBase}/produtos`, {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'access-token': access_token
         },
         body: JSON.stringify({
             nome: produto.nome,
@@ -229,7 +237,8 @@ async function carregaProdutos(filtros = {}) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'access-token': access_token
             }
         });
         if (!response.ok) {
@@ -257,7 +266,6 @@ async function carregaProdutos(filtros = {}) {
         });
     } catch (error) {
         console.error('Erro:', error);
-        // Trate o erro de acordo com o que você deseja fazer no front-end
     }
 }
 
@@ -267,7 +275,8 @@ async function removeProduto(id) {
         await fetch(`${urlBase}/produtos/${id}`, {
             method: "DELETE",
             header: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'access-token': access_token
             }
         })
         .then(response => response.json())
@@ -319,13 +328,13 @@ async function editarProduto() {
         const response = await fetch(`${urlBase}/produtos`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'access-token': access_token
             },
             body: JSON.stringify(produtoEditado)
         });
 
         if (!response.ok) {
-            console.log(response);
             throw new Error('Erro ao editar o produto.');
         }
 
@@ -342,7 +351,13 @@ async function editarProduto() {
 
 async function obterProdutoPorId(id) {
     try {
-        const response = await fetch(`${urlBase}/produtos/id/${id}`);
+        const response = await fetch(`${urlBase}/produtos/id/${id}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': access_token
+            }
+        });
         if (!response.ok) {
             throw new Error('Erro ao obter detalhes do produto.');
         }
@@ -371,7 +386,9 @@ async function cadastrarUsuario(nome, email, senha) {
         if (response.ok) {
             window.location.href = 'index.html';
         } else if (response.status === 409){
-            alert('Email já cadastrado');
+            const errorData = await response.json();
+            const errorMsg = errorData.errors?.[0]?.msg || 'Erro de conflito desconhecido';
+            alert(errorMsg);
         } else {
             console.error('Erro ao fazer cadastro:', response.statusText);
             throw new Error('Erro ao fazer cadastro');
@@ -392,15 +409,12 @@ async function fazerLogin(email, senha) {
             body: JSON.stringify({ email, senha })
         });
         if (response.ok) {
+
             const data = await response.json();
-
-            // armazenando jwt, nome e email com cookie
-            document.cookie = `token=${data.token}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
-            document.cookie = `nome=${data.nome}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
-            document.cookie = `email=${data.email}; expires=${new Date(Date.now() + 3600000).toUTCString()}; path=/`;
-
+            localStorage.setItem('token', data.access_token)
             window.location.href = 'cadastrar.html';
-        } else if (response.status === 401) {
+
+        } else if (response.status === 403) {
             alert('Credenciais inválidas');
         } else {
             console.error('Erro ao fazer login:', response.statusText);
@@ -413,14 +427,11 @@ async function fazerLogin(email, senha) {
 }
 
 function fazerLogout() {
-
-    const expiredDate = new Date(0).toUTCString();
-    document.cookie = `token=; expires=${expiredDate}; path=/`;
-    document.cookie = `nome=; expires=${expiredDate}; path=/`;
-    document.cookie = `email=; expires=${expiredDate}; path=/`;
+    localStorage.removeItem('token');
 
     window.location.href = 'index.html';
 }
+
 const formCadastro = document.getElementById('formCadastro');
 if (formCadastro){
     formCadastro.addEventListener('submit', async function (event) {
@@ -451,4 +462,23 @@ if(formLogin){
             console.error('Erro ao fazer login:', error);
         }
     })
+}
+
+
+// Funções para redirecionar para o index.html caso não possua o token
+
+const urlsSemAutenticacao = [
+    "index",
+    "cadastro_login"
+];
+
+function urlNaoRequerAutenticacao(url) {
+    return urlsSemAutenticacao.some(urlSemAutenticacao => url.endsWith('/'+urlSemAutenticacao+'.html'));
+}
+
+function verificarAutenticacao() {
+    const urlAtual = window.location.pathname;
+    if (!urlNaoRequerAutenticacao(urlAtual) && !access_token ) {
+        window.location.href = "index.html";
+    }
 }
