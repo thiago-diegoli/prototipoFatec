@@ -15,3 +15,7 @@ Content-Type: application/json
     "email": "nome@email.com",
     "senha": "senha123"
 }
+
+###
+GET {{{baseURL}}}/
+Content-Type: application/json
