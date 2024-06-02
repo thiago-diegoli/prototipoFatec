@@ -219,6 +219,10 @@ router.put('/', auth, validaProduto, async(req, res) => {
         if(!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()})
         }
+
+        req.body.quantidade = parseInt(req.body.quantidade)
+        req.body.preco = parseFloat(req.body.preco)
+
         const produto = await db.collection(nomeCollection).updateOne({'_id': {$eq: new ObjectId(idDocumento)}},
         {$set: req.body})
         res.status(202).json(produto)  

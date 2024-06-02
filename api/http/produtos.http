@@ -1,9 +1,9 @@
 @baseURL = http://localhost:4000/api/produtos
 
 
-GET {{baseURL}}/?limit=3&skip=0
+GET {{baseURL}}/?limit=5&skip=0
 Content-Type: application/json
-access-token:
+access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
 
 ###
 GET {{baseURL}}/id/6626f488d60c4529f354953e
@@ -31,10 +31,10 @@ access-token:
 ###
 PUT {{baseURL}}
 Content-Type: application/json
-access-token:
+access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
 
 {
-    "_id": "6623bcd6c7fb6560f205bd46",
+    "_id": "665cd3d5812f30dd169f8500",
     "nome": "Caneta Esferografica Vermelha",
     "quantidade": 2,
     "preco": 5.05,

@@ -209,8 +209,8 @@ async function editarProduto() {
         const produtoEditado = {
             _id: document.getElementById('editId').value,
             nome: document.getElementById('editNome').value,
-            quantidade: document.getElementById('editQuantidade').value,
-            preco: document.getElementById('editPreco').value,
+            quantidade: parseInt(document.getElementById('editQuantidade').value),
+            preco: parseFloat(document.getElementById('editPreco').value),
             descricao: document.getElementById('editDescricao').value
         };
 
