@@ -43,7 +43,7 @@ async function filtrarProduto() {
         const queryString = new URLSearchParams(filtros).toString();
         if(queryString !== ''){
             const response = await fetch(`${urlBase}/produtos/filtros/?${queryString}`, {
-                method: "POST",
+                method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
                     'access-token': access_token
