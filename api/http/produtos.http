@@ -42,6 +42,11 @@ access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0N
     "data": "2024-04-11T23:25:05.852Z"
 }
 ###
-GET {{baseURL}}/filtros/?qtdMin=1&qtdMax=4&precoMin=40&precoMax=50
+GET {{baseURL}}/filtros/?qtdMin=2&qtdMax=5&precoMin=1&precoMax=9
 Content-Type: application/json
-access-token:
+access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
+
+###
+GET {{baseURL}}/filtros/?qtdMin=3
+Content-Type: application/json
+access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE

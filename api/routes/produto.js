@@ -74,33 +74,31 @@ router.get('/filtros/', auth, async (req, res) => {
     let filtroPreco = {};
 
     if (qtdMin !== undefined && qtdMax !== undefined) {
-        filtroQtd = {
-            'quantidade': { $gte: parseInt(qtdMin), $lte: parseInt(qtdMax) }
+        filtroQtd['quantidade'] = {
+            $gte: parseInt(qtdMin),
+            $lte: parseInt(qtdMax)
         };
-    } else if (qtdMin !== undefined) {
-        filtroQtd = {
-            'quantidade': { $gte: parseInt(qtdMin) }
-        };
-    } else if (qtdMax !== undefined) {
-        filtroQtd = {
-            'quantidade': { $lte: parseInt(qtdMax) }
-        };
-    }
-
-    if (precoMin !== undefined && precoMax !== undefined) {
-        if (parseFloat(precoMin)) {
-            filtroPreco = {
-                'preco': { $gte: parseFloat(precoMin), $lte: parseFloat(precoMax) }
-            };
+    } else {
+        if (qtdMin !== undefined) {
+            filtroQtd['quantidade'] = { $gte: parseInt(qtdMin) };
         }
-    } else if (precoMin !== undefined) {
-        filtroPreco = {
-            'preco': { $gte: parseFloat(precoMin) }
+        if (qtdMax !== undefined) {
+            filtroQtd['quantidade'] = { $lte: parseInt(qtdMax) };
+        }
+    }
+    
+    if (precoMin !== undefined && precoMax !== undefined) {
+        filtroPreco['preco'] = {
+            $gte: parseFloat(precoMin),
+            $lte: parseFloat(precoMax)
         };
-    } else if (precoMax !== undefined) {
-        filtroPreco = {
-            'preco': { $lte: parseFloat(precoMax) }
-        };
+    } else {
+        if (precoMin !== undefined) {
+            filtroPreco['preco'] = { $gte: parseFloat(precoMin) };
+        }
+        if (precoMax !== undefined) {
+            filtroPreco['preco'] = { $lte: parseFloat(precoMax) };
+        }
     }
 
     if (Object.keys(filtroQtd).length === 0 && Object.keys(filtroPreco).length === 0) {
@@ -125,7 +123,7 @@ router.get('/filtros/', auth, async (req, res) => {
 
     try {
         const cursor = await db.collection(nomeCollection).find({
-            $and: [filtroQtd, filtroPreco]
+            $and: [ filtroQtd, filtroPreco]
         });
 
         const docs = [];
