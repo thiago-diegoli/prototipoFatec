@@ -40,7 +40,12 @@ router.post('/cadastro', validaCadastro, async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(409).json({errors: errors.array()})  
+            const conflitoEmail = errors.array().find(err => err.msg === 'O email informado já está cadastrado');
+            if (conflitoEmail) {
+                return res.status(409).json({ errors: errors.array() });
+            } else {
+                return res.status(400).json({ errors: errors.array() });
+            }
         }
         const { nome, email, senha } = req.body;
         const senhaCriptografada = await bcrypt.hash(senha, 10);
@@ -48,7 +53,6 @@ router.post('/cadastro', validaCadastro, async (req, res) => {
         res.status(201).json(usuario);
     } catch(err) {
         res.status(500).json({message: `${err.message} Erro no server`})
-
     }
 });
 
