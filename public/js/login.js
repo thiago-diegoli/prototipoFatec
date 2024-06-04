@@ -19,8 +19,6 @@ async function fazerLogin(email, senha) {
             localStorage.setItem('token', data.access_token)
             window.location.href = 'cadastrar.html';
 
-        } else if (response.status === 403) {
-            window.showErrorMessage('Credenciais inválidas')
         } else {
             throw new Error('Credenciais Inválidas');
         }

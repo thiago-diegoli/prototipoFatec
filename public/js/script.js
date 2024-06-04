@@ -50,7 +50,14 @@ async function filtrarProduto() {
                 }
             });
             if (!response.ok) {
-                throw new Error('Erro ao buscar os produtos filtrados');
+                const responseData = await response.json();
+                const errorMessages = responseData.errors.map(error => error.msg).join(', ');
+                throw new Error(errorMessages);
+            } else {
+                let existingError = document.getElementById('table-error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
             }
 
             const data = await response.json();
@@ -78,7 +85,7 @@ async function filtrarProduto() {
             carregaProdutos();
         }
     } catch (error) {
-        console.error('Erro:', error);
+        showTableErrorMessage(error)
     }
 }
 
@@ -131,7 +138,7 @@ async function carregaProdutos(filtros = {}) {
             }
         });
         if (!response.ok) {
-            throw new Error('Erro ao buscar os produtos filtrados');
+            throw new Error(response.msg);
         }
 
         const data = await response.json();
@@ -270,7 +277,20 @@ function showErrorMessage(message) {
     errorDiv.textContent = message;
     form.insertBefore(errorDiv, form.firstChild);
     console.log(message)
-    console.log('form:', form)
+}
+
+function showTableErrorMessage(message) {
+    let table = document.getElementById('tableProdutos') || null;
+    let existingError = document.getElementById('table-error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    const errorDiv = document.createElement('div');
+    errorDiv.id = 'table-error-message';
+    errorDiv.className = 'text-red-500 text-sm';
+    errorDiv.textContent = message;
+    table.parentNode.insertBefore(errorDiv, table);
+    console.log(message);
 }
 
 window.showErrorMessage = showErrorMessage
