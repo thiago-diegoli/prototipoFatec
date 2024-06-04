@@ -257,3 +257,20 @@ async function obterProdutoPorId(id) {
         return null;
     }
 }
+
+
+function showErrorMessage(message) {
+    let form = document.getElementById('formLogin') || null;
+    if(form == null){
+        form = document.getElementById('formCadastro');
+    }
+    const errorDiv = document.createElement('div');
+    errorDiv.id = 'error-message';
+    errorDiv.className = 'text-red-500 text-sm';
+    errorDiv.textContent = message;
+    form.insertBefore(errorDiv, form.firstChild);
+    console.log(message)
+    console.log('form:', form)
+}
+
+window.showErrorMessage = showErrorMessage

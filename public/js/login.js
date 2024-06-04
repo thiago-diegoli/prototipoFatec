@@ -1,5 +1,3 @@
-const urlBase = 'http://localhost:4000/api'
-
 async function fazerLogin(email, senha) {
     try {
         const response = await fetch(`${urlBase}/logins`, {
@@ -9,6 +7,12 @@ async function fazerLogin(email, senha) {
             },
             body: JSON.stringify({ email, senha })
         });
+
+        const errorElement = document.getElementById('error-message');
+        if (errorElement) {
+            errorElement.remove();
+        }
+
         if (response.ok) {
 
             const data = await response.json();
@@ -16,13 +20,11 @@ async function fazerLogin(email, senha) {
             window.location.href = 'cadastrar.html';
 
         } else if (response.status === 403) {
-            alert('Credenciais inválidas');
+            window.showErrorMessage('Credenciais inválidas')
         } else {
-            console.error('Erro ao fazer login:', response.statusText);
-            throw new Error('Erro ao fazer login');
+            throw new Error('Credenciais Inválidas');
         }
     } catch (error) {
-        console.error('Erro ao fazer login:', error);
         throw error;
     }
 }
@@ -37,7 +39,7 @@ if(formLogin){
         try {
             await fazerLogin(email, senha);
         } catch (error) {
-            console.error('Erro ao fazer login:', error);
+            window.showErrorMessage(`${error}`)
         }
     })
 }
@@ -51,18 +53,20 @@ async function cadastrarUsuario(nome, email, senha) {
             },
             body: JSON.stringify({ nome, email, senha })
         });
+
+        const errorElement = document.getElementById('error-message');
+        if (errorElement) {
+            errorElement.remove();
+        }
+
         if (response.ok) {
             window.location.href = 'index.html';
-        } else if (response.status === 409){
-            const errorData = await response.json();
-            const errorMsg = errorData.errors?.[0]?.msg || 'Erro de conflito desconhecido';
-            alert(errorMsg);
         } else {
-            console.error('Erro ao fazer cadastro:', response.statusText);
-            throw new Error('Erro ao fazer cadastro');
+            const responseData = await response.json();
+            const errorMessages = responseData.errors.map(error => error.msg).join(', ');
+            throw new Error(errorMessages);
         }
     } catch (error) {
-        console.error('Erro ao cadastrar usuário:', error);
         throw error;
     }
 }
@@ -79,7 +83,7 @@ if (formCadastro){
         try {
             await cadastrarUsuario(nome, email, senha);
         } catch (error) {
-            console.error('Erro ao cadastrar usuário:', error);
+            window.showErrorMessage(`${error}`)
         }
     });
 }
