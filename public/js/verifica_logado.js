@@ -1,4 +1,4 @@
-const urlBase = 'http://localhost:4000/api'
+const urlBase = window.location.href.replace(/\/[^\/]*$/, '') + '/api'
 const access_token = localStorage.getItem('token') || null
 
 document.addEventListener('DOMContentLoaded', function (event) {
