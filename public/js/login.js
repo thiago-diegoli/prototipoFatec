@@ -1,3 +1,5 @@
+// Possui os métodos para requisitar rotas de login e cadastro do backend
+
 async function fazerLogin(email, senha) {
     try {
         const response = await fetch(`${urlBase}/logins`, {

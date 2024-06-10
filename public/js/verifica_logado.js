@@ -26,3 +26,9 @@ function fazerLogout() {
 
     window.location.href = 'index.html';
 }
+
+/*
+    * Métodos para redirecionar o usuário que não estiver com token
+    * Para caso tente acessar rotas sem fazer login
+    * Age em todas as rotas menos /index (login) e /cadastro_login (registro)
+*/

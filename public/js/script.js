@@ -1,5 +1,10 @@
 // urlBase já está declarada em verifica_logado.js
 
+/*  
+    * Possui todos os métodos para acessar o CRUD RESTful de produtos do backend
+    * Além disso possui o método de filtrar
+    * Também possui funções para exibir erros na tela
+*/
 const requisicaoForm = document.getElementById('requisicao');
 
 if (requisicaoForm) {
@@ -17,7 +22,7 @@ if (requisicaoForm) {
     });
 }
 
-//filtro
+// Filtro
 async function filtrarProduto() {
     const qtdMin = document.getElementById('qtdMin').value;
     const qtdMax = document.getElementById('qtdMax').value;
@@ -195,6 +200,7 @@ async function removeProduto(id) {
 
 
 async function abrirModal(id) {
+    // Modal de editar produtos
     const produtoObj = await obterProdutoPorId(id);
     const produto = produtoObj[0]
     if (produto) {
@@ -267,6 +273,7 @@ async function obterProdutoPorId(id) {
 
 
 function showErrorMessage(message) {
+    // Mostra erro de login ou de cadastro
     let form = document.getElementById('formLogin') || null;
     if(form == null){
         form = document.getElementById('formCadastro');
@@ -280,6 +287,7 @@ function showErrorMessage(message) {
 }
 
 function showTableErrorMessage(message) {
+    // Mostra erro ao filtrar errado produtos na tabela
     let table = document.getElementById('tableProdutos') || null;
     let existingError = document.getElementById('table-error-message');
     if (existingError) {

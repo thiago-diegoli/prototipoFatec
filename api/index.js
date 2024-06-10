@@ -2,6 +2,7 @@ import express from 'express'
 import {config} from 'dotenv'
 import fs from 'fs'
 import swaggerUI from 'swagger-ui-express'
+import cors from 'cors';
 config() // carrega as variáveis do .env
 
 const app = express()
@@ -12,6 +13,7 @@ const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger
 import RotasProdutos from './routes/produto.js'
 import RotasLogins from './routes/login.js'
 
+app.use(cors());
 app.use(express.json()) //Habilita o parse do JSON
 //Rota de conteúdo público
 app.use('/', express.static('public'))

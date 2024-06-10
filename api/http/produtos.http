@@ -1,15 +1,17 @@
 @baseURL = http://localhost:4000/api/produtos
 
-
+# Teste para pegar todos os produtos com GET
 GET {{baseURL}}/?limit=5&skip=0
 Content-Type: application/json
-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
+access-token:
 
+# Teste para pegar um produto em específico através do _id
 ###
 GET {{baseURL}}/id/6626f488d60c4529f354953e
 Content-Type: application/json
-access-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkMmY5YzI3ZjZhZjIyM2M2ZmIzYzMiLCJpYXQiOjE3MTYzMzQ2ODgsImV4cCI6MTcxNjQyMTA4OH0.o8PGv6F5-xi79lTJ3iJgyc1JJaBWgBHb3n1JV6BCMPk
+access-token:
 
+# Teste de cadastro com POST de um produto genérico
 ###
 POST {{baseURL}}
 Content-Type: application/json
@@ -23,15 +25,17 @@ access-token:
     "data": "2024-04-11T23:25:05.852Z"
 }
 
+# Teste para deletar produto específico através do _id
 ###
 DELETE {{baseURL}}/6639171fda80f9cc4adaa803
 Content-Type: application/json
 access-token:
 
+# Teste para editar produto com PUT
 ###
 PUT {{baseURL}}
 Content-Type: application/json
-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
+access-token:
 
 {
     "_id": "665cd3d5812f30dd169f8500",
@@ -41,12 +45,15 @@ access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0N
     "descricao": "Caneta Esferografica Vermelha",
     "data": "2024-04-11T23:25:05.852Z"
 }
+
+# Teste para filtrar produtos com quantidade mínima e/ou máxima e/ou preço mínimo e/ou máximo
 ###
 GET {{baseURL}}/filtros/?qtdMin=2&qtdMax=5&precoMin=1&precoMax=9
 Content-Type: application/json
-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
+access-token:
 
+# Teste para filtrar apenas com quantidade mínima
 ###
 GET {{baseURL}}/filtros/?qtdMin=3
 Content-Type: application/json
-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNWQ0MzM0NzVmMjljYmQ1YmZjNTEiLCJpYXQiOjE3MTczNjE1OTcsImV4cCI6MTcxNzQ0Nzk5N30.ft0AkH5Vnv9FghCqCkXMjHp04SHCEUGfUHItWVOr2yE
+access-token:

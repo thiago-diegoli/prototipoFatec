@@ -6,7 +6,7 @@
 
 Este é o repositório do primeiro trabalho de banco de dados não relacional desenvolvido na Fatec Votorantim, sob a orientação do professor [Ricardo Leme](https://github.com/ricardoleme). O projeto utiliza MongoDB e NodeJS para criar uma aplicação web.
 
-Você pode acessar a aplicação hospedada no Vercel [aqui](link).
+Você pode acessar a aplicação hospedada no Vercel [aqui](prototipo-fatec-three.vercel.app).
 
 ## Sobre
 Este projeto foi pensado como um sistema de pedido compras utilizado pelos responsáveis de compras de materiais da Fatec Votorantim baseado no padrão da BEC (Bolsa Eletrônica de Compras de São Paulo). 
@@ -36,6 +36,7 @@ npm i express-validator
 npm i nodemon -D
 npm i bcrypt
 npm i jsonwebtoken
+npm i cors
 ```
 
 Certifique-se de estar dentro do diretório do projeto ao executar esses comandos.

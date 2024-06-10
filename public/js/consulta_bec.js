@@ -1,3 +1,5 @@
+// Possui apenas a função de acessar a API externa da BEC para cadastrar produtos
+
 document.addEventListener('DOMContentLoaded', function (event) {
     event.preventDefault()
     var input = document.getElementById('produtoDesejadoInput');

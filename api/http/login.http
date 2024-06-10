@@ -1,4 +1,5 @@
 @baseURL = http://localhost:4000/api/logins
+# Teste de cadastro de usuário
 POST {{baseURL}}/cadastro
 Content-Type: application/json
 
@@ -8,6 +9,7 @@ Content-Type: application/json
     "senha": "senha123"
 }
 ###
+# Teste de login
 POST {{baseURL}}/
 Content-Type: application/json
 
