@@ -114,7 +114,7 @@ router.get('/filtros/', auth, async (req, res) => {
             res.status(400).json({
                 errors: [{
                     value: `Parâmetros inválidos`,
-                    msg: 'Os parâmetros são iguais ou a quantidade mínima é maior que a máxima'
+                    msg: 'Os parâmetros são iguais valor mínimo maior que o máximo'
                 }]
             })
             return;
